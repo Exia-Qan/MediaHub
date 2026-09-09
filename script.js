@@ -22,6 +22,13 @@ try {
 
 
 const library = [
+   {
+        id: "movie1", type: "movie", title: "Spider-Man: No Way Home", tags: ["Action", "Marvel", "Sci/fi"],
+        quality: "HD", year: "2021", rating: "8.7",
+        desc: "Peter Parker turns to Doctor Strange after his identity destroys the life he knows, but a magical mistake draws powerful outsiders into his world",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-qCuUdJwKIB0236e08IglUy6mJ_9tLXMyQlt-Mv_OwzCZWd9YvQcASzA&s=10",
+        content: { "Watch": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+    },
     {
         id: "anime1", type: "anime", title: "Naruto Shippuden", tags: ["Action", "Ninja", "Shonen"],
         quality: "HD", year: "2002", rating: "8.7",
