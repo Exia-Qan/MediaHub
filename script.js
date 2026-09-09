@@ -29,6 +29,13 @@ const library = [
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwPx9LbVvuC17uHKI_IuQKSi0jY1r1c6o3mo1dE_q163J28rQtDTxUJQo&s=10",
         content: { "Season 1 - Episode 1": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
     },
+   {
+        id: "anime1", type: "anime", title: "Naruto", tags: ["Action", "Ninja", "Shonen"],
+        quality: "HD", year: "2002", rating: "8.7",
+        desc: "Naruto Uzumaki is a loud, hyperactive ninja who dreams of becoming the Hokage.",
+        poster: "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p194893_b_v12_aa.jpg",
+        content: { "Season 1 - Episode 1": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+    },
     {
         id: "manga1", type: "manga", title: "One Piece", tags: ["Action", "Adventure", "Pirates"],
         quality: "HD", year: "1997", rating: "9.2",
