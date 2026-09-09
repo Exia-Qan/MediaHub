@@ -47,7 +47,7 @@ const library = [
         id: "anime2", type: "anime", title: "Haikyuu", tags: ["Comedy", "Sport", "Shonen"],
         quality: "HD", year: "2014", rating: "8.8",
         desc: "Hinata Shoyo strives to become a great volleyball player.",
-        poster: "https://haikyuu.fandom.com/wiki/Haiky%C5%AB!!_Season_3",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL4Vk4UMknsxFCwaAutE2A8z06PTtn-LelFp8n1O3NrRGNd_mMW7dkUoBs&s=10",
         content: { "Episode 1": ["assets/anime/Haikyuu/Season1/haikyuuep01.mp4"] }
     }
 ];
