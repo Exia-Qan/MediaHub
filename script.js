@@ -40,7 +40,7 @@ const library = [
         id: "webtoon1", type: "webtoon", title: "Solo Leveling", tags: ["Action", "Fantasy", "System"],
         quality: "4K", year: "2018", rating: "9.5",
         desc: "The weakest hunter becomes the only one who can level up.",
-        poster: "assets/webtoons/SoloLeveling/wslp.JPEG",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNVuYnydQtl0DmTKSs1cgJ0GJdA5_1r1xaL4Ck8qnreBtSH3R_la4vdBQ&s=10",
         content: { "Chapter 1": ["assets/webtoons/SoloLeveling/Chapter1/solo_leveling_ch000_p001.webp"] }
     },
     {
