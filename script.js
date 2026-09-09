@@ -36,6 +36,13 @@ const library = [
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKW5-1NAUSpD4ADc7gadzaFCzSRT0sERcTNItUF3facjUef8CkQsCRJMvE&s=10",
         content: { "Watch": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
     },
+     {
+        id: "series2", type: "series", title: "Sherlock", tags: ["Drama", "Crime", "Psychological thriller", "Mystery"],
+        quality: "HD", year: "2010", rating: "9",
+        desc: "Sherlock is a British mystery crime drama television series based on Sir Arthur Conan Doyle's Sherlock Holmes detective stories. Created by Steven Moffat and Mark Gatiss, the show stars Benedict Cumberbatch as Sherlock Holmes and Martin Freeman as Doctor John Watson.",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_sDlbvCZgktSNClL8DeXvRLOawEfzDG4Zo8IFkkzr3XqLCwkJzfGjxpA_&s=10",
+        content: { "Watch": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+    },
     {
         id: "anime1", type: "anime", title: "Naruto Shippuden", tags: ["Action", "Ninja", "Shonen"],
         quality: "HD", year: "2002", rating: "8.7",
