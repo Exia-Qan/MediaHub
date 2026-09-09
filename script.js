@@ -33,7 +33,7 @@ const library = [
         id: "manga1", type: "manga", title: "One Piece", tags: ["Action", "Adventure", "Pirates"],
         quality: "HD", year: "1997", rating: "9.2",
         desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
-        poster: "assets/manga/OnePiece/opp.jpg",
+        poster: "https://ia601805.us.archive.org/19/items/opp_20260909/opp.jpg",
         content: { "Chapter 1": ["assets/manga/OnePiece/Chapter1/uone_piece_v001-005.jpg"] }
     },
     {
