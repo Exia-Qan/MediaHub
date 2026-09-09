@@ -29,6 +29,13 @@ const library = [
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-qCuUdJwKIB0236e08IglUy6mJ_9tLXMyQlt-Mv_OwzCZWd9YvQcASzA&s=10",
         content: { "Watch": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
     },
+     {
+        id: "series1", type: "series", title: "Dexter", tags: ["Drama", "Crime", "Psychological thriller", "Mystery"],
+        quality: "HD", year: "2008", rating: "8.6",
+        desc: "He's smart. He's lovable. He's Dexter Morgan, America's favorite serial killer, who spends his days solving crimes and his nights committing them.",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKW5-1NAUSpD4ADc7gadzaFCzSRT0sERcTNItUF3facjUef8CkQsCRJMvE&s=10",
+        content: { "Watch": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+    },
     {
         id: "anime1", type: "anime", title: "Naruto Shippuden", tags: ["Action", "Ninja", "Shonen"],
         quality: "HD", year: "2002", rating: "8.7",
