@@ -26,7 +26,7 @@ const library = [
         id: "anime1", type: "anime", title: "Naruto", tags: ["Action", "Ninja", "Shonen"],
         quality: "HD", year: "2002", rating: "8.7",
         desc: "Naruto Uzumaki is a loud, hyperactive ninja who dreams of becoming the Hokage.",
-        poster: "assets/anime/Naruto shippuden/nsp.jpg",
+        poster: "https://github.com/Exia-Qan/MediaHub/blob/main/nsp.jpg?raw=true",
         content: { "Season 1 - Episode 1": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
     },
     {
