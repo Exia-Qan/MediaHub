@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaHub | Cloud Edition</title>
+    <style>
+        :root {
+            --primary-color: #00aaff;
+            --bg-color: #0f1014;
+            --card-bg: #1a1c23;
+            --text-color: #fff;
+            --text-dim: #a0a0a0;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 4%; background: #000; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+        .logo { font-size: 24px; font-weight: bold; cursor: pointer; color: #fff; }
+        .logo span { color: var(--primary-color); }
+        
+        .search-wrapper {
+            display: flex; align-items: center; background: #1a1c23; 
+            border: 1px solid #333; border-radius: 4px; padding: 5px 10px;
+            transition: var(--transition); width: 250px;
+        }
+        .search-wrapper:focus-within {
+            width: 400px; border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+        }
+        .search-wrapper input {
+            background: transparent; border: none; color: white; 
+            padding: 5px; outline: none; width: 100%; font-size: 14px;
+        }
+        .search-icon { color: #aaa; margin-right: 8px; cursor: pointer; }
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links button {
+            background: none; border: none; color: #ccc; margin-left: 20px;
+            cursor: pointer; font-size: 14px; transition: var(--transition);
+        }
+        .nav-links button:hover { color: var(--primary-color); }
+
+        /* --- PROFILE SYSTEM --- */
+        .profile-container { position: relative; cursor: pointer; }
+        .profile-pic { 
+            width: 38px; height: 38px; border-radius: 50%; 
+            background: #333; border: 2px solid var(--primary-color);
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; color: white; transition: var(--transition);
+        }
+        .profile-pic:hover { transform: scale(1.1); background: #444; }
+        
+        .profile-menu {
+            position: absolute; top: 45px; right: 0; width: 180px;
+            background: #1a1c23; border: 1px solid #333; border-radius: 8px;
+            display: none; flex-direction: column; padding: 10px 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); z-index: 1100;
+            animation: fadeIn 0.3s ease;
+        }
+        .profile-menu.active { display: flex; }
+        .profile-menu button {
+            background: none; border: none; color: #ccc; padding: 12px 20px;
+            text-align: left; cursor: pointer; font-size: 14px; transition: 0.2s;
+        }
+        .profile-menu button:hover { background: #252831; color: white; }
+
+        
+        .main-container { flex: 1; padding: 30px 4%; }
+        .page-title { 
+            font-size: 24px; margin-bottom: 20px; font-weight: 600; 
+            border-left: 4px solid var(--primary-color); padding-left: 15px;
+        }
+
+        
+        .grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 20px;
+        }
+        .card {
+            background: var(--card-bg); border-radius: 6px; overflow: hidden;
+            cursor: pointer; transition: var(--transition); position: relative;
+            border: 1px solid #222;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
+        .poster-container { position: relative; width: 100%; height: 240px; }
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+        .badge {
+            position: absolute; top: 8px; right: 8px;
+            background: #fbca06; color: #000; font-size: 10px; 
+            font-weight: bold; padding: 2px 5px; border-radius: 3px;
+        }
+        .card-info { padding: 10px; text-align: center; }
+        .card-info h4 { margin: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* --- DETAIL PAGE --- */
+        .detail-page {
+            display: flex; gap: 40px; align-items: center; 
+            padding: 40px; border-radius: 15px;
+            background: linear-gradient(135deg, #1a1c23 0%, #0f1014 100%);
+            border: 1px solid #333;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .detail-poster { width: 300px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .detail-info { flex: 1; }
+        .detail-info h1 { font-size: 48px; margin: 0 0 10px 0; }
+        .detail-meta { display: flex; gap: 15px; align-items: center; margin-bottom: 10px; color: var(--text-dim); }
+        .rating { background: #fbca06; color: #000; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+        .detail-genres { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .genre-pill {
+            background: rgba(0, 170, 255, 0.1); color: var(--primary-color);
+            border: 1px solid var(--primary-color); padding: 4px 12px;
+            border-radius: 20px; font-size: 14px; cursor: pointer; transition: var(--transition);
+        }
+        .genre-pill:hover { background: var(--primary-color); color: white; }
+        .detail-desc { font-size: 18px; line-height: 1.6; color: #ccc; margin-bottom: 30px; }
+        .watch-btn { 
+            background: var(--primary-color); color: white; border: none; 
+            padding: 15px 40px; font-size: 18px; font-weight: bold; 
+            border-radius: 5px; cursor: pointer; transition: 0.3s;
+        }
+        .watch-btn:hover { background: #0088cc; transform: scale(1.05); }
+
+        
+        .hidden { display: none !important; }
+        .back-header { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+        .back-btn { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+        .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        .chapter-btn {
+            background: var(--card-bg); color: white; border: 1px solid #333;
+            padding: 15px; text-align: left; cursor: pointer; border-radius: 4px; transition: 0.3s;
+        }
+        .chapter-btn:hover { background: #333; border-color: var(--primary-color); }
+        #content-area { display: flex; flex-direction: column; align-items: center; background: #000; padding: 20px 0; }
+        #content-area video { width: 100%; max-width: 1100px; }
+        #content-area img { width: 100%; max-width: 800px; display: block; }
+        .webtoon-mode img { max-width: 100% !important; }
+
+        
+        footer { background: #000; padding: 50px 4% 20px 4%; border-top: 1px solid #222; color: var(--text-dim); font-size: 14px; }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-col h3 { color: #fff; margin-bottom: 20px; font-size: 18px; }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
+        .footer-links li:hover { color: var(--primary-color); }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid #222; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+
+    
+    <nav class="navbar">
+        <div class="logo" onclick="resetFilters()">MEDIA<span>HUB</span></div>
+        
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" placeholder="Search titles, tags..." oninput="updateSearch()">
+        </div>
+
+        <div class="nav-right">
+            <div class="nav-links">
+                <button onclick="setCategory('all')">Home</button>
+                <button onclick="setCategory('anime')">Anime</button>
+                <button onclick="setCategory('manga')">Manga</button>
+                <button onclick="setCategory('webtoon')">Webtoons</button>
+            </div>
+            
+            <div class="profile-container" onclick="toggleProfile()">
+                <div class="profile-pic" id="user-avatar">G</div>
+                <div class="profile-menu" id="profile-menu">
+                    <button onclick="alert('My Profile Coming Soon!')">My Profile</button>
+                    <button onclick="showMyList()">My List</button>
+                    <button id="auth-btn" onclick="handleAuth()">Login</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div id="gallery-page">
+            <h1 class="page-title" id="category-title">All Content</h1>
+            <div id="movie-grid" class="grid"></div>
+        </div>
+
+        <div id="detail-page" class="hidden">
+            <div class="back-header">
+                <button class="back-btn" onclick="showPage('gallery-page')">← Back to Home</button>
+            </div>
+            <div class="detail-page">
+                <img id="detail-img" src="" class="detail-poster">
+                <div class="detail-info">
+                    <h1 id="detail-title">Title</h1>
+                    <div class="detail-meta">
+                        <span id="detail-year">2024</span>
+                        <span class="rating" id="detail-rating">⭐ 0.0</span>
+                        <span id="detail-type">Anime</span>
+                    </div>
+                    <div id="detail-genres" class="detail-genres"></div>
+                    <p class="detail-desc" id="detail-desc">Description goes here...</p>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="watch-btn" id="watch-btn">Watch Now / Read Now</button>
+                        <button class="watch-btn" style="background: #444;" onclick="addToMyList()">❤ Add to List</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="selection-page" class="hidden">
+            <div class="back-header">
+                <button class="back-btn" onclick="showPage('detail-page')">← Back to Info</button>
+                <h1 id="series-title">Series Title</h1>
+            </div>
+            <div id="chapter-list" class="chapter-grid"></div>
+        </div>
+
+        <div id="viewer-page" class="hidden">
+            <div class="back-header">
+                <button class="back-btn" onclick="showPage('selection-page')">← Back to Chapters</button>
+                <h2 id="current-chapter-title">Chapter Title</h2>
+            </div>
+            <div id="content-area"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Genres</h3>
+                <ul class="footer-links" id="genre-list"></ul>
+            </div>
+            <div class="footer-col">
+                <h3>Country</h3>
+                <ul class="footer-links">
+                    <li onclick="setCategory('all')">Japan</li>
+                    <li onclick="setCategory('all')">South Korea</li>
+                    <li onclick="setCategory('all')">USA</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>About</h3>
+                <p>The ultimate local hub for your favorite media.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2024 MediaHub. All Rights Reserved.</div>
+    </footer>
+
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+    
+    <script src="script.js"></script>
+</body>
+</html>
