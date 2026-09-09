@@ -23,10 +23,10 @@ try {
 
 const library = [
     {
-        id: "anime1", type: "anime", title: "Naruto", tags: ["Action", "Ninja", "Shonen"],
+        id: "anime1", type: "anime", title: "Naruto Shippuden", tags: ["Action", "Ninja", "Shonen"],
         quality: "HD", year: "2002", rating: "8.7",
         desc: "Naruto Uzumaki is a loud, hyperactive ninja who dreams of becoming the Hokage.",
-        poster: "https://archive.org/download/nsp_20260909/nsp.jpg",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwPx9LbVvuC17uHKI_IuQKSi0jY1r1c6o3mo1dE_q163J28rQtDTxUJQo&s=10",
         content: { "Season 1 - Episode 1": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
     },
     {
