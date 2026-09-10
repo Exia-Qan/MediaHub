@@ -76,7 +76,13 @@ const library = [
         quality: "HD", year: "2014", rating: "8.8",
         desc: "Hinata Shoyo strives to become a great volleyball player.",
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhFCc5B7V2DcACNKCGp5eLBSQJ8sDyszX-eC7rRy-z8w&s=10",
-        content: { "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] }
+        content: { 
+          
+          "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+                 
+                 
+                 }
     }
 ];
 
