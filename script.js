@@ -1,14 +1,14 @@
-
+// ========================================================================
+// 1. FIREBASE CONFIGURATION
+// ========================================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyAUyaoTV6IqEm7IAc0HWN9WQfPLKoaCJdI",
-  authDomain: "mediahub-939f5.firebaseapp.com",
-  projectId: "mediahub-939f5",
-  storageBucket: "mediahub-939f5.firebasestorage.app",
-  messagingSenderId: "1083226186253",
-  appId: "1:1083226186253:web:956d88e6e0cfd0b832ab44",
-  measurementId: "G-YYCF83XSWK"
+    apiKey: "YOUR_API_KEY", 
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "...",
+    appId: "..."
 };
-
 
 let auth, db;
 try {
@@ -20,7 +20,9 @@ try {
     console.error("❌ Firebase Init Error:", error);
 }
 
-
+// ========================================================================
+// 2. DATA LIBRARY
+// ========================================================================
 const library = [
     {
         id: "movie1", type: "movie", title: "Spider-Man: No Way Home", tags: ["Action", "Marvel", "Sci/fi"],
@@ -88,7 +90,9 @@ const library = [
 let state = { category: 'all', searchQuery: '', activeTag: 'all', user: null };
 let currentSeries = null;
 
-
+// ========================================================================
+// 3. AUTHENTICATION LOGIC
+// ========================================================================
 
 if (auth) {
     auth.onAuthStateChanged(user => {
@@ -112,16 +116,12 @@ function updateUIForUser(user) {
 
 async function handleAuth() {
     if (!auth) return alert("Firebase not connected!");
-
     if (state.user) {
         try {
             await auth.signOut();
             alert("Logged out successfully!");
-        } catch (error) {
-            alert("Logout error: " + error.message);
-        }
+        } catch (error) { alert("Logout error: " + error.message); }
     } else {
-        // PRO FIX: Ask for choice to avoid invalid-credentials error
         const choice = prompt("Type '1' to Login or '2' to Sign Up:");
         if (choice === '1') {
             const email = prompt("Login - Enter Email:");
@@ -141,14 +141,14 @@ async function handleAuth() {
                     alert("Account created and logged in!");
                 } catch (e) { alert("Signup Error: " + e.message); }
             }
-        } else {
-            alert("Invalid choice. Please select 1 or 2.");
         }
     }
     toggleProfile();
 }
 
-
+// ========================================================================
+// 4. DATABASE LOGIC (My List)
+// ========================================================================
 
 async function addToMyList() {
     if (!state.user) return alert("Please login first!");
@@ -181,10 +181,12 @@ async function showMyList() {
             card.innerHTML = `<div class="poster-container"><img src="${item.poster}"><div class="badge">${item.quality}</div></div><div class="card-info"><h4>${item.title}</h4></div>`;
             grid.appendChild(card);
         });
-    } catch (e) { alert("Error: " + e.message); }
+    } catch (e) { alert("Error: " + e.//message); }
 }
 
-
+// ========================================================================
+// 5. NAVIGATION & UI LOGIC
+// ========================================================================
 
 function toggleProfile() {
     const menu = document.getElementById('profile-menu');
@@ -288,8 +290,16 @@ function openViewer(chap) {
     document.getElementById('current-chapter-title').innerText = chap;
     const area = document.getElementById('content-area');
     area.innerHTML = '';
-    const files = currentSeries.content[chap];
-    if (currentSeries.type === 'anime') {
+    let files = currentSeries.content[chap];
+
+    // FIX: Dropbox Link Fixer (Changes dl=0 to raw=1 automatically)
+    if (files[0].includes("dropbox.com")) {
+        files[0] = files[0].replace("dl=0", "raw=1");
+    }
+
+    // FIX: Handle a variety of types that use video (anime, movie, series)
+    const videoTypes = ['anime', 'movie', 'series'];
+    if (videoTypes.includes(currentSeries.type)) {
         const v = document.createElement('video');
         v.src = files[0]; v.controls = true; v.autoplay = true;
         area.appendChild(v);
