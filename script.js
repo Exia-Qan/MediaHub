@@ -23,32 +23,65 @@ try {
 
 const library = [
     {
-        id: "anime1", type: "anime", title: "Naruto", tags: ["Action", "Ninja", "Shonen"],
+        id: "movie1", type: "movie", title: "Spider-Man: No Way Home", tags: ["Action", "Marvel", "Sci/fi"],
+        quality: "HD", year: "2021", rating: "8.7",
+        desc: "Peter Parker turns to Doctor Strange after his identity destroys the life he knows, but a magical mistake draws powerful outsiders into his world",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-qCuUdJwKIB0236e08IglUy6mJ_9tLXMyQlt-Mv_OwzCZWd9YvQcASzA&s=10",
+        content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&dl=0"] }
+    },
+    {
+        id: "series1", type: "series", title: "Dexter", tags: ["Drama", "Crime", "Psychological thriller", "Mystery"],
+        quality: "HD", year: "2008", rating: "8.6",
+        desc: "He's smart. He's lovable. He's Dexter Morgan, America's favorite serial killer.",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKW5-1NAUSpD4ADc7gadzaFCzSRT0sERcTNItUF3facjUef8CkQsCRJMvE&s=10",
+        content: { 
+            "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+            "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+        }
+    },
+    {
+        id: "series2", type: "series", title: "Sherlock", tags: ["Drama", "Crime", "Psychological thriller", "Mystery"],
+        quality: "HD", year: "2010", rating: "9",
+        desc: "Sherlock is a British mystery crime drama television series based on Sir Arthur Conan Doyle's Sherlock Holmes.",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_sDlbvCZgktSNClL8DeXvRLOawEfzDG4Zo8IFkkzr3XqLCwkJzfGjxpA_&s=10",
+        content: { 
+            "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+        }
+    },
+    {
+        id: "anime1", type: "anime", title: "Naruto Shippuden", tags: ["Action", "Ninja", "Shonen"],
         quality: "HD", year: "2002", rating: "8.7",
         desc: "Naruto Uzumaki is a loud, hyperactive ninja who dreams of becoming the Hokage.",
-        poster: "assets/anime/Naruto shippuden/nsp.jpg",
-        content: { "Season 1 - Episode 1": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwPx9LbVvuC17uHKI_IuQKSi0jY1r1c6o3mo1dE_q163J28rQtDTxUJQo&s=10",
+        content: { "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] }
+    },
+    {
+        id: "anime2", type: "anime", title: "Naruto", tags: ["Action", "Ninja", "Shonen"],
+        quality: "HD", year: "2002", rating: "8.7",
+        desc: "Naruto Uzumaki is a loud, hyperactive ninja who dreams of becoming the Hokage.",
+        poster: "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p194893_b_v12_aa.jpg",
+        content: { "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] }
     },
     {
         id: "manga1", type: "manga", title: "One Piece", tags: ["Action", "Adventure", "Pirates"],
         quality: "HD", year: "1997", rating: "9.2",
         desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
-        poster: "assets/manga/OnePiece/opp.jpg",
-        content: { "Chapter 1": ["assets/manga/OnePiece/Chapter1/uone_piece_v001-005.jpg"] }
+        poster: "https://ia601805.us.archive.org/19/items/opp_20260909/opp.jpg",
+        content: { "Chapter 1": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"] }
     },
     {
         id: "webtoon1", type: "webtoon", title: "Solo Leveling", tags: ["Action", "Fantasy", "System"],
         quality: "4K", year: "2018", rating: "9.5",
         desc: "The weakest hunter becomes the only one who can level up.",
-        poster: "assets/webtoons/SoloLeveling/wslp.JPEG",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNVuYnydQtl0DmTKSs1cgJ0GJdA5_1r1xaL4Ck8qnreBtSH3R_la4vdBQ&s=10",
         content: { "Chapter 1": ["assets/webtoons/SoloLeveling/Chapter1/solo_leveling_ch000_p001.webp"] }
     },
     {
-        id: "anime2", type: "anime", title: "Haikyuu", tags: ["Comedy", "Sport", "Shonen"],
+        id: "anime3", type: "anime", title: "Haikyuu", tags: ["Comedy", "Sport", "Shonen"],
         quality: "HD", year: "2014", rating: "8.8",
         desc: "Hinata Shoyo strives to become a great volleyball player.",
-        poster: "assets/anime/Haikyuu/haikyuu.jpg",
-        content: { "Episode 1": ["assets/anime/Haikyuu/Season1/haikyuuep01.mp4"] }
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhFCC5B7V2DcACNKCGp5eLBSQJ8sDyszX-eC7rRy-z8w&s=10",
+        content: { "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] }
     }
 ];
 
