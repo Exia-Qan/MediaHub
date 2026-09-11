@@ -82,8 +82,8 @@ const library = [
           "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
           "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
                  }
-    },
-   {
+      },
+      {
         id: "anime2", type: "anime", title: "Naruto", tags: ["Action", "Ninja", "Shonen"],
         quality: "HD", year: "2002", rating: "8.7",
         desc: "Naruto Uzumaki is a loud, hyperactive ninja who dreams of becoming the Hokage.",
@@ -147,7 +147,7 @@ const library = [
                  
                  
                  }
-    }
+    },
     {
         id: "anime4", type: "anime", title: "The Silent Witch", tags: ["Comedy", "Sport", "Shonen"],
         quality: "HD", year: "2014", rating: "8.8",
@@ -168,7 +168,7 @@ const library = [
                  
                  
                  }
-    }
+    },
    {
         id: "anime4", type: "anime", title: "OSHI NO KO", tags: ["Comedy", "Sport", "Shonen"],
         quality: "HD", year: "2014", rating: "8.8",
@@ -189,7 +189,7 @@ const library = [
                  
                  
                  }
-    }
+    },
    {
         id: "anime4", type: "anime", title: "HELL'S PARADISE", tags: ["Comedy", "Sport", "Shonen"],
         quality: "HD", year: "2014", rating: "8.8",
@@ -210,7 +210,7 @@ const library = [
                  
                  
                  }
-    }
+    },
 ];
 
 let state = { category: 'all', searchQuery: '', activeTag: 'all', user: null };
