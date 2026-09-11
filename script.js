@@ -27,42 +27,98 @@ const library = [
         quality: "HD", year: "2021", rating: "8.7",
         desc: "Peter Parker turns to Doctor Strange after his identity destroys the life he knows, but a magical mistake draws powerful outsiders into his world",
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-qCuUdJwKIB0236e08IglUy6mJ_9tLXMyQlt-Mv_OwzCZWd9YvQcASzA&s=10",
-        content: { "Watch": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+        content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&dl=0"] }
     },
      {
         id: "series1", type: "series", title: "Dexter", tags: ["Drama", "Crime", "Psychological thriller", "Mystery"],
         quality: "HD", year: "2008", rating: "8.6",
         desc: "He's smart. He's lovable. He's Dexter Morgan, America's favorite serial killer, who spends his days solving crimes and his nights committing them.",
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKW5-1NAUSpD4ADc7gadzaFCzSRT0sERcTNItUF3facjUef8CkQsCRJMvE&s=10",
-        content: { "Watch": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+        content: { 
+          "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+        }
     },
      {
         id: "series2", type: "series", title: "Sherlock", tags: ["Drama", "Crime", "Psychological thriller", "Mystery"],
         quality: "HD", year: "2010", rating: "9",
         desc: "Sherlock is a British mystery crime drama television series based on Sir Arthur Conan Doyle's Sherlock Holmes detective stories. Created by Steven Moffat and Mark Gatiss, the show stars Benedict Cumberbatch as Sherlock Holmes and Martin Freeman as Doctor John Watson.",
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_sDlbvCZgktSNClL8DeXvRLOawEfzDG4Zo8IFkkzr3XqLCwkJzfGjxpA_&s=10",
-        content: { "Watch": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+        content: { 
+          "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] , 
+        }
     },
     {
         id: "anime1", type: "anime", title: "Naruto Shippuden", tags: ["Action", "Ninja", "Shonen"],
         quality: "HD", year: "2002", rating: "8.7",
         desc: "Naruto Uzumaki is a loud, hyperactive ninja who dreams of becoming the Hokage.",
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwPx9LbVvuC17uHKI_IuQKSi0jY1r1c6o3mo1dE_q163J28rQtDTxUJQo&s=10",
-        content: { "Season 1 - Episode 1": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+        content: { 
+          "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+                 }
     },
    {
-        id: "anime1", type: "anime", title: "Naruto", tags: ["Action", "Ninja", "Shonen"],
+        id: "anime2", type: "anime", title: "Naruto", tags: ["Action", "Ninja", "Shonen"],
         quality: "HD", year: "2002", rating: "8.7",
         desc: "Naruto Uzumaki is a loud, hyperactive ninja who dreams of becoming the Hokage.",
         poster: "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p194893_b_v12_aa.jpg",
-        content: { "Season 1 - Episode 1": ["assets/anime/Naruto shippuden/Season1/nsep01.mp4"] }
+        content: { 
+          "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] , 
+        }
     },
     {
         id: "manga1", type: "manga", title: "One Piece", tags: ["Action", "Adventure", "Pirates"],
         quality: "HD", year: "1997", rating: "9.2",
         desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
         poster: "https://ia601805.us.archive.org/19/items/opp_20260909/opp.jpg",
-        content: { "Chapter 1": ["assets/manga/OnePiece/Chapter1/uone_piece_v001-005.jpg"] }
+        content: { 
+          "Chapter 1": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          "Chapter 2": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          "Chapter 3": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          "Chapter 4": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          "Chapter 5": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          "Chapter 6": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          "Chapter 7": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          "Chapter 8": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          "Chapter 9": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          "Chapter 10": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU5ZlSGY70fojDak_yEDJeti8h6Uf8egnU8vhfnDPE2A&s=10"],
+          
+        }
     },
     {
         id: "webtoon1", type: "webtoon", title: "Solo Leveling", tags: ["Action", "Fantasy", "System"],
@@ -72,7 +128,7 @@ const library = [
         content: { "Chapter 1": ["assets/webtoons/SoloLeveling/Chapter1/solo_leveling_ch000_p001.webp"] }
     },
     {
-        id: "anime2", type: "anime", title: "Haikyuu", tags: ["Comedy", "Sport", "Shonen"],
+        id: "anime3", type: "anime", title: "Haikyuu", tags: ["Comedy", "Sport", "Shonen"],
         quality: "HD", year: "2014", rating: "8.8",
         desc: "Hinata Shoyo strives to become a great volleyball player.",
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhFCc5B7V2DcACNKCGp5eLBSQJ8sDyszX-eC7rRy-z8w&s=10",
@@ -80,6 +136,77 @@ const library = [
           
           "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
           "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+                 
+                 
+                 }
+    }
+    {
+        id: "anime4", type: "anime", title: "The Silent Witch", tags: ["Comedy", "Sport", "Shonen"],
+        quality: "HD", year: "2014", rating: "8.8",
+        desc: "Hinata Shoyo strives to become a great volleyball player.",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3VkULdu838eIpTWf4JQZK61nPNmqmogZSeosYDT3xR-AknAU5LmetTXg&s=10",
+        content: { 
+          
+          "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+                 
+                 
+                 }
+    }
+   {
+        id: "anime4", type: "anime", title: "OSHI NO KO", tags: ["Comedy", "Sport", "Shonen"],
+        quality: "HD", year: "2014", rating: "8.8",
+        desc: "Hinata Shoyo strives to become a great volleyball player.",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOaJ-zmKSiEpIXHEpk76X9jSLmSVc3NCMBOCoppTYIF9Oi1c_LmT5gyYGC&s=10",
+        content: { 
+          
+          "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+                 
+                 
+                 }
+    }
+   {
+        id: "anime4", type: "anime", title: "HELL'S PARADISE", tags: ["Comedy", "Sport", "Shonen"],
+        quality: "HD", year: "2014", rating: "8.8",
+        desc: "Hinata Shoyo strives to become a great volleyball player.",
+        poster: "https://m.media-amazon.com/images/M/MV5BZjhmMjhkNjUtMGU2MC00N2IzLTg1YzItZDk5ODMxMDYxODc0XkEyXkFqcGc@._V1_QL75_UX190_CR0,5,190,281_.jpg",
+        content: { 
+          
+          "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
+          "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"] ,
                  
                  
                  }
