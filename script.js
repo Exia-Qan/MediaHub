@@ -191,7 +191,7 @@ const library = [
                  }
     },
    {
-        id: "anime5", type: "anime", title: "HELL'S PARADISE", tags: ["Comedy", "Sport", "Shonen"],
+        id: "anime6", type: "anime", title: "HELL'S PARADISE", tags: ["Comedy", "Sport", "Shonen"],
         quality: "HD", year: "2014", rating: "8.8",
         desc: "Hinata Shoyo strives to become a great volleyball player.",
         poster: "https://m.media-amazon.com/images/M/MV5BZjhmMjhkNjUtMGU2MC00N2IzLTg1YzItZDk5ODMxMDYxODc0XkEyXkFqcGc@._V1_QL75_UX190_CR0,5,190,281_.jpg",
