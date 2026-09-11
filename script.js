@@ -170,7 +170,7 @@ const library = [
                  }
     },
    {
-        id: "anime4", type: "anime", title: "OSHI NO KO", tags: ["Comedy", "Sport", "Shonen"],
+        id: "anime5", type: "anime", title: "OSHI NO KO", tags: ["Comedy", "Sport", "Shonen"],
         quality: "HD", year: "2014", rating: "8.8",
         desc: "Hinata Shoyo strives to become a great volleyball player.",
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOaJ-zmKSiEpIXHEpk76X9jSLmSVc3NCMBOCoppTYIF9Oi1c_LmT5gyYGC&s=10",
@@ -191,7 +191,7 @@ const library = [
                  }
     },
    {
-        id: "anime4", type: "anime", title: "HELL'S PARADISE", tags: ["Comedy", "Sport", "Shonen"],
+        id: "anime5", type: "anime", title: "HELL'S PARADISE", tags: ["Comedy", "Sport", "Shonen"],
         quality: "HD", year: "2014", rating: "8.8",
         desc: "Hinata Shoyo strives to become a great volleyball player.",
         poster: "https://m.media-amazon.com/images/M/MV5BZjhmMjhkNjUtMGU2MC00N2IzLTg1YzItZDk5ODMxMDYxODc0XkEyXkFqcGc@._V1_QL75_UX190_CR0,5,190,281_.jpg",
