@@ -2,12 +2,13 @@
 // 1. FIREBASE CONFIGURATION
 // ========================================================================
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY", 
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "...",
-    appId: "..."
+  apiKey: "AIzaSyAUyaoTV6IqEm7IAc0HWN9WQfPLKoaCJdI",
+  authDomain: "mediahub-939f5.firebaseapp.com",
+  projectId: "mediahub-939f5",
+  storageBucket: "mediahub-939f5.firebasestorage.app",
+  messagingSenderId: "1083226186253",
+  appId: "1:1083226186253:web:956d88e6e0cfd0b832ab44",
+  measurementId: "G-YYCF83XSWK"
 };
 
 let auth, db;
