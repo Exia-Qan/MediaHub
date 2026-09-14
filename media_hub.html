@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaHub</title>
+    <style>
+        :root {
+            --primary-color: #00aaff;
+            --bg-color: #0f1014;
+            --card-bg: #1a1c23;
+            --text-color: #fff;
+            --text-dim: #a0a0a0;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 4%; background: #000; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+        .logo { font-size: 24px; font-weight: bold; cursor: pointer; color: #fff; }
+        .logo span { color: var(--primary-color); }
+        
+        .search-wrapper {
+            display: flex; align-items: center; background: #1a1c23; 
+            border: 1px solid #333; border-radius: 4px; padding: 5px 10px;
+            transition: var(--transition); width: 250px;
+        }
+        .search-wrapper:focus-within {
+            width: 400px; border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+        }
+        .search-wrapper input {
+            background: transparent; border: none; color: white; 
+            padding: 5px; outline: none; width: 100%; font-size: 14px;
+        }
+        .search-icon { color: #aaa; margin-right: 8px; cursor: pointer; }
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links button {
+            background: none; border: none; color: #ccc; margin-left: 20px;
+            cursor: pointer; font-size: 14px; transition: var(--transition);
+        }
+        .nav-links button:hover { color: var(--primary-color); }
+
+        
+        .profile-container { position: relative; cursor: pointer; }
+        .profile-pic { 
+            width: 38px; height: 38px; border-radius: 50%; 
+            background: #333; border: 2px solid var(--primary-color);
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; color: white; transition: var(--transition);
+        }
+        .profile-pic:hover { transform: scale(1.1); background: #444; }
+        
+        .profile-menu {
+            position: absolute; top: 45px; right: 0; width: 180px;
+            background: #1a1c23; border: 1px solid #333; border-radius: 8px;
+            display: none; flex-direction: column; padding: 10px 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); z-index: 1100;
+            animation: fadeIn 0.3s ease;
+        }
+        .profile-menu.active { display: flex; }
+        .profile-menu button {
+            background: none; border: none; color: #ccc; padding: 12px 20px;
+            text-align: left; cursor: pointer; font-size: 14px; transition: 0.2s;
+        }
+        .profile-menu button:hover { background: #252831; color: white; }
+
+        
+        .auth-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center;
+            z-index: 2000;
+        }
+        .auth-overlay.active { display: flex; }
+        .auth-modal {
+            background: var(--card-bg); padding: 40px; border-radius: 15px;
+            width: 100%; max-width: 400px; border: 1px solid var(--primary-color);
+            text-align: center; box-shadow: 0 0 30px rgba(0,170,255,0.2);
+            animation: modalSlide 0.4s ease;
+        }
+        @keyframes modalSlide { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .auth-modal h2 { font-size: 28px; margin-bottom: 20px; }
+        .auth-form { display: flex; flex-direction: column; gap: 15px; }
+        .auth-form input {
+            padding: 12px; border-radius: 5px; border: 1px solid #333;
+            background: #0f1014; color: white; outline: none; font-size: 16px;
+        }
+        .auth-form input:focus { border-color: var(--primary-color); }
+        .auth-submit-btn {
+            background: var(--primary-color); color: white; border: none;
+            padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer;
+            transition: var(--transition); font-size: 16px;
+        }
+        .auth-submit-btn:hover { background: #0088cc; transform: scale(1.02); }
+        .auth-toggle { margin-top: 20px; font-size: 14px; color: var(--text-dim); }
+        .auth-toggle span { color: var(--primary-color); cursor: pointer; font-weight: bold; }
+        .auth-toggle span:hover { text-decoration: underline; }
+
+        
+        .main-container { flex: 1; padding: 30px 4%; }
+        .page-title { 
+            font-size: 24px; margin-bottom: 20px; font-weight: 600; 
+            border-left: 4px solid var(--primary-color); padding-left: 15px;
+        }
+
+        
+        .grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 20px;
+        }
+        .card {
+            background: var(--card-bg); border-radius: 6px; overflow: hidden;
+            cursor: pointer; transition: var(--transition); position: relative;
+            border: 1px solid #222;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
+        .poster-container { position: relative; width: 100%; height: 240px; }
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+        .badge {
+            position: absolute; top: 8px; right: 8px;
+            background: #fbca06; color: #000; font-size: 10px; 
+            font-weight: bold; padding: 2px 5px; border-radius: 3px;
+        }
+        .card-info { padding: 10px; text-align: center; }
+        .card-info h4 { margin: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        
+        .detail-page {
+            display: flex; gap: 40px; align-items: center; 
+            padding: 40px; border-radius: 15px;
+            background: linear-gradient(135deg, #1a1c23 0%, #0f1014 100%);
+            border: 1px solid #333;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .detail-poster { width: 300px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .detail-info { flex: 1; }
+        .detail-info h1 { font-size: 48px; margin: 0 0 10px 0; }
+        .detail-meta { display: flex; gap: 15px; align-items: center; margin-bottom: 10px; color: var(--text-dim); }
+        .rating { background: #fbca06; color: #000; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+        .detail-genres { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .genre-pill {
+            background: rgba(0, 170, 255, 0.1); color: var(--primary-color);
+            border: 1px solid var(--primary-color); padding: 4px 12px;
+            border-radius: 20px; font-size: 14px; cursor: pointer; transition: var(--transition);
+        }
+        .genre-pill:hover { background: var(--primary-color); color: white; }
+        .detail-desc { font-size: 18px; line-height: 1.6; color: #ccc; margin-bottom: 30px; }
+        .watch-btn { 
+            background: var(--primary-color); color: white; border: none; 
+            padding: 15px 40px; font-size: 18px; font-weight: bold; 
+            border-radius: 5px; cursor: pointer; transition: 0.3s;
+        }
+        .watch-btn:hover { background: #0088cc; transform: scale(1.05); }
+
+        
+        .hidden { display: none !important; }
+        .back-header { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+        .back-btn { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+        .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        .chapter-btn {
+            background: var(--card-bg); color: white; border: 1px solid #333;
+            padding: 15px; text-align: left; cursor: pointer; border-radius: 4px; transition: 0.3s;
+        }
+        .chapter-btn:hover { background: #333; border-color: var(--primary-color); }
+        #content-area { display: flex; flex-direction: column; align-items: center; background: #000; padding: 20px 0; }
+        #content-area video { width: 100%; max-width: 1100px; }
+        #content-area img { width: 100%; max-width: 800px; display: block; }
+        .webtoon-mode img { max-width: 100% !important; }
+
+        
+        footer { background: #000; padding: 50px 4% 20px 4%; border-top: 1px solid #222; color: var(--text-dim); font-size: 14px; }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-col h3 { color: #fff; margin-bottom: 20px; font-size: 18px; }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
+        .footer-links li:hover { color: var(--primary-color); }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid #222; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+
+    
+    <nav class="navbar">
+        <div class="logo" onclick="resetFilters()">MEDIA<span>HUB</span></div>
+        
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" placeholder="Search titles, tags..." oninput="updateSearch()">
+        </div>
+
+        <div class="nav-right">
+            <div class="nav-links">
+                <button onclick="setCategory('all')">Home</button>
+                <button onclick="setCategory('movie')">Movie</button>
+                <button onclick="setCategory('series')">Series</button>
+                <button onclick="setCategory('anime')">Anime</button>
+                <button onclick="setCategory('manga')">Manga</button>
+                <button onclick="setCategory('webtoon')">Webtoons</button>
+            </div>
+            
+            <div class="profile-container" onclick="toggleProfile()">
+                <div class="profile-pic" id="user-avatar">G</div>
+                <div class="profile-menu" id="profile-menu">
+                    <button onclick="alert('My Profile Coming Soon!')">My Profile</button>
+                    <button onclick="showMyList()">My List</button>
+                    <button id="auth-btn" onclick="openAuthModal()">Login</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PREMIUM AUTH MODAL -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-modal">
+            <h2 id="auth-title">Welcome Back</h2>
+            <div class="auth-form">
+                <input type="email" id="auth-email" placeholder="Email Address">
+                <input type="password" id="auth-password" placeholder="Password">
+                <button class="auth-submit-btn" id="auth-submit-btn" onclick="processAuth()">Login</button>
+            </div>
+            <div class="auth-toggle">
+                <span id="auth-toggle-text">Don't have an account?</span> 
+                <span id="auth-toggle-btn" onclick="toggleAuthMode()">Sign Up</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- SCREEN 1: Gallery -->
+        <div id="gallery-page">
+            <h1 class="page-title" id="category-title">All Content</h1>
+            <div id="movie-grid" class="grid"></div>
+        </div>
+
+        <!-- SCREEN 2: Detail Page -->
+        <div id="detail-page" class="hidden">
+            <div class="back-header">
+                <button class="back-btn" onclick="showPage('gallery-page')">← Back to Home</button>
+            </div>
+            <div class="detail-page">
+                <img id="detail-img" src="" class="detail-poster">
+                <div class="detail-info">
+                    <h1 id="detail-title">Title</h1>
+                    <div class="detail-meta">
+                        <span id="detail-year">2024</span>
+                        <span class="rating" id="detail-rating">⭐ 0.0</span>
+                        <span id="detail-type">Anime</span>
+                    </div>
+                    <div id="detail-genres" class="detail-genres"></div>
+                    <p class="detail-desc" id="detail-desc">Description goes here...</p>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="watch-btn" id="watch-btn">Watch Now / Read Now</button>
+                        <button class="watch-btn" style="background: #444;" onclick="addToMyList()">❤ Add to List</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: Selection -->
+        <div id="selection-page" class="hidden">
+            <div class="back-header">
+                <button class="back-btn" onclick="showPage('detail-page')">← Back to Info</button>
+                <h1 id="series-title">Series Title</h1>
+            </div>
+            <div id="chapter-list" class="chapter-grid"></div>
+        </div>
+
+        <!-- SCREEN 4: Viewer -->
+        <div id="viewer-page" class="hidden">
+            <div class="back-header">
+                <button class="back-btn" onclick="showPage('selection-page')">← Back to Chapters</button>
+                <h2 id="current-chapter-title">Chapter Title</h2>
+            </div>
+            <div id="content-area"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Genres</h3>
+                <ul class="footer-links" id="genre-list"></ul>
+            </div>
+            <div class="footer-col">
+                <h3>Country</h3>
+                <ul class="footer-links">
+                    <li onclick="setCategory('all')">Myanmar</li>
+                    <li onclick="setCategory('all')">Japan</li>
+                
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>About</h3>
+                <p>The ultimate local hub for your favorite media.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2024 MediaHub. All Rights Reserved.</div>
+    </footer>
+
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyAUyaoTV6IqEm7IAc0HWN9WQfPLKoaCJdI",
+          authDomain: "mediahub-939f5.firebaseapp.com",
+          projectId: "mediahub-939f5",
+          storageBucket: "mediahub-939f5.firebasestorage.app",
+          messagingSenderId: "1083226186253",
+          appId: "1:1083226186253:web:956d88e6e0cfd0b832ab44",
+          measurementId: "G-YYCF83XSWK"
+        };
+
+        let auth, db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+            console.log("✅ Firebase connected successfully!");
+        } catch (error) {
+            console.error("❌ Firebase Init Error:", error);
+        }
+
+        
+        const library = [
+            {
+                id: "movie1", type: "movie", title: "Spider-Man: No Way Home", tags: ["Action", "Marvel", "Sci/fi"],
+                quality: "HD", year: "2021", rating: "8.7",
+                desc: "Peter Parker turns to Doctor Strange after his identity destroys the life he knows...",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-qCuUdJwKIB0236e08IglUy6mJ_9tLXMyQlt-Mv_OwzCZWd9YvQcASzA&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "movie2", type: "movie", title: "Deadpool ", tags: ["Marvel", "Action"],
+                quality: "HD", year: "2016", rating: "8.7",
+                desc: "Wade Wilson is a wisecracking mercenary who undergoes a rogue medical experiment to cure his terminal cancer, leaving him disfigured but with accelerated healing powers and a quest for revenge",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwft0gnEK42aogttrrUQrwGNk3UWpjyy5hjOUnxm_ZwOf1D_SGe4vUMAI&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "series14", type: "series", title: "Arcane", tags: ["Drama", "Action",],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnaXLZx-OkXdi2jkt0hubLO9uwsQyu0kN0sTEN31FxNx5jlj7ytpe5hE8&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            {
+                id: "movie3", type: "movie", title: "Prisoners", tags: ["Crime","Thriller"],
+                quality: "HD", year: "2013", rating: "8.7",
+                desc: "2013 thriller Prisoners follows a desperate father who takes the law into his own hands after his young daughter and her friend go missing.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUrJma8_11L6l5pFyA_z2qI0eH_W5GuAV-BBbd0uXAo88Hh557cFJTdz4W&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "movie4", type: "movie", title: "Gladiator", tags: ["Action","Adventure"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4tsO-Y3vaW1rCpl5oTnhuQxHi3sPdK07Zjjgf21JI-qoCybKUgqkOVjDz&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "series1", type: "series", title: "Dexter", tags: ["Drama", "Crime", "Thriller", "Mystery"],
+                quality: "HD", year: "2008", rating: "8.6",
+                desc: "He's smart. He's lovable. He's Dexter Morgan, America's favorite serial killer...",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKW5-1NAUSpD4ADc7gadzaFCzSRT0sERcTNItUF3facjUef8CkQsCRJMvE&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"], 
+                }
+            },
+            {
+                id: "series2", type: "series", title: "Sherlock", tags: ["Crime", "Drama", "Mystery"],
+                quality: "HD", year: "2010", rating: "8.6",
+                desc: "Sherlock TV series is a modern-day adaptation of Sir Arthur Conan Doyle's detective stories, set in 21st-century London.",
+                poster: "https://prod9-static.bbus-static.com/api/shain/v1/dataservice/ResizeImage/$value?Format=%27webp%27&Quality=80&ImageId=%27386858%27&EntityType=%27Item%27&EntityId=%2750965%27&Width=800&Height=800&ImageUrl=386858&imageType=square",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"], 
+                }
+            },
+            {
+                id: "series3", type: "series", title: "The Mentalist", tags: ["Crime", "Drama", "Mystery"],
+                quality: "HD", year: "2008", rating: "8.6",
+                desc: "Patrick Jane, a former fraudulent psychic who works as a consultant for the California Bureau of Investigation (CBI) using his sharp observational skills to solve murder cases while secretly hunting down Red John, the serial killer who murdered his wife and daughter",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3fqXnbShkG633ReE1KKjxkbCa6p3kQDb7KFAHcwe45KErOUtIwZ-iWR5Y&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"], 
+                }
+            },
+            {
+                id: "series4", type: "series", title: "Moon Knight", tags: ["Marvel", "Action",],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzObynvgySgGqrB2Bxn724v7Dua3K-xeKy2PTDV098KDKt7p0xMNmNLLw&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 4": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 5": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 6": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 7": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 8": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 9": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 10": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"], 
+                }
+            },
+            {
+                id: "anime1", type: "anime", title: "Naruto Shippuden", tags: ["Action", "Ninja", "Shonen"],
+                quality: "HD", year: "2002", rating: "8.7",
+                desc: "Naruto Uzumaki is a loud, hyperactive ninja who dreams of becoming the Hokage.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwPx9LbVvuC17uHKI_IuQKSi0jY1r1c6o3mo1dE_q163J28rQtDTxUJQo&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime2", type: "anime", title: "Haikyuu", tags: ["Sport", "School", "Shonen"],
+                quality: "HD", year: "2014", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSremrJJkjNzET6qcg0PnFqWMI88Fvrw6_i1qLevSPB1g&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime3", type: "anime", title: "Attack on Titan", tags: ["Action", "Mystery", "Thriller"],
+                quality: "HD", year: "2013", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOKbBI4Wlp7z9YjmBNPBoHc4o0KigbGgbpuT7EGVbuT6Jk5d7Cld5Eq0KK&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime4", type: "anime", title: "Bleach", tags: ["Action", "Adventure", "Shonen"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLN5U5mOZ1E7XW7WAmqlfNC0K0Cka4HcIM9ekvrKRVISNNy4A3sa-Fn5I&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "manga1", type: "manga", title: "One Piece", tags: ["Action", "Adventure", "Pirates"],
+                quality: "HD", year: "1997", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://ia601805.us.archive.org/19/items/opp_20260909/opp.jpg",
+                content: { 
+                    "Chapter 1": [
+                        "https://dwgkfo5b3odmw.cloudfront.net/manga/thumbs/thumb-196468-OnePiece_GN112_C1_Web-3-RjXnpWDHRJHMG3ps8cj5tQ.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u001.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u002.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u003.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u004.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u005.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u006.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u007.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u008.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u009.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u010.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u011.jpg",
+
+                    ], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga2", type: "manga", title: "Kaiju No. 8", tags: ["Action", "Adventure",],
+                quality: "HD", year: "2024", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://upload.wikimedia.org/wikipedia/en/c/cd/Kaiju_No_8.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+                content: { 
+                    "Chapter 1": [
+                        "https://dwgkfo5b3odmw.cloudfront.net/manga/thumbs/thumb-196468-OnePiece_GN112_C1_Web-3-RjXnpWDHRJHMG3ps8cj5tQ.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u001.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u002.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u003.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u004.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u005.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u006.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u007.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u008.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u009.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u010.jpg",
+                        "https://cdn.mangagoa.xyz/manga_69c933867456d/vol-tbe-chapter-1181/u011.jpg",
+
+                    ], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga3", type: "manga", title: "Demon Slayer: Kimetsu no Yaiba", tags: ["Action", "Adventure", "Fantasy"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://dwgkfo5b3odmw.cloudfront.net/manga/thumbs/thumb-26981-DSK_01_web.jpg",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga4", type: "manga", title: "Jujutsu Kaisen:Manga", tags: ["Action", "Adventure", "Fantasy"],
+                quality: "HD", year: "2018", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://cdn.kobo.com/book-images/44717797-1fe9-475e-bca1-fe8aa6d0e7d8/353/569/90/False/jujutsu-kaisen-vol-1.jpg",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga5", type: "manga", title: "Attack on Titan:Manga", tags: ["Action", "Mystery", "Thriller"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQLdUJ2J2R9MVBT3J4qpMLrjFrAwKGi42vsg1RzGs-CIGgB7PNQQSpq_Sd&s=10",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga6", type: "manga", title: "Bleach:Manga", tags: ["Action", "Adventure", "Shonen"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://upload.wikimedia.org/wikipedia/en/3/3f/Bleach_%28manga%29_1.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "series7", type: "series", title: "Game of Thrones", tags: ["Drama", "Action", "Royal"],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsHR0Nh_Vrr3byjj9B5B-JvSNVaIWpqD6liks3-bmSQ2xrKOvGuXL72Xc&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            {
+                id: "manga7", type: "manga", title: "JoJo's Bizarre Adventure:Manga", tags: ["Action", "Adventure", "Fantasy"],
+                quality: "HD", year: "1987", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw2LR_s3mTbdLnuQtFLWD0s9pcnyyjmk6JuZuSYOdVpTJrOSd4wY7ATpGu&s=10",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga8", type: "manga", title: "My Hero Academia:Manga", tags: ["Action", "Adventure", "Fantasy"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgN5u99XEXrGE0i52ImiZAhMnLsQc3lZJgB4t2k69kXpdlwHkMcfqtNJk&s=10",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "series11", type: "series", title: "From", tags: ["mystery", "Horror", "Thriller"],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://m.media-amazon.com/images/M/MV5BNDAwNDljNWEtNWE1Zi00YjFlLWEzM2UtY2E3ZTM1MTcxMTcyXkEyXkFqcGc@._V1_.jpg",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            {
+                id: "manga9", type: "manga", title: "Fullmetal Alchemist:Manga", tags: ["Action", "Adventure", "Fantasy"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://upload.wikimedia.org/wikipedia/en/9/9d/Fullmetal123.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga10", type: "manga", title: "Vagabond", tags: ["Action", "Adventure", "Fantasy"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://upload.wikimedia.org/wikipedia/en/9/99/Vagabond_%28manga%29_vol._1.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga11", type: "manga", title: "Haikyuu:Manga", tags: ["Sport", "School", "Shonen"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://static.wikia.nocookie.net/haikyuu/images/a/a8/Haikyu_1_DE_cover.png/revision/latest/scale-to-width-down/250?cb=20200708184317",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "series9", type: "series", title: "The Sandman", tags: ["Fantasy", "Action","DC"],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmi__xl7cfaJLX4c1vi1lkZPl_a1bD3T-9kJvL_rBEGcVAxMDCCRxIzME&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            {
+                id: "manga12", type: "manga", title: "Berserk:Manga", tags: ["Action", "Thriller", "Fantasy"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBawIlYG3VtQc_XcHdbyBcYot9tdb9LWMXlblNJq1LGI-fMpWTRp2x0ckh&s=10",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga13", type: "manga", title: "Blue Lock:Manga", tags: ["Sport", "School", "Shonen"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIeRHpjLBxCjMp1D3XurkNOnqdL6iS80gWx4LzR68GnA&s=10",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "manga14", type: "manga", title: "Initial D:manga", tags: ["Sport", "School", "Shonen"],
+                quality: "HD", year: "2016", rating: "9.2",
+                desc: "Monkey D. Luffy and his crew search for the legendary One Piece.",
+                poster: "https://cdn.kobo.com/book-images/9127945e-ca4c-4d7e-a363-a2c8409bcf9b/1200/1200/False/initial-d-4.jpg",
+                content: { 
+                    "Chapter 1": [], "Chapter 2":[],"Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon1", type: "webtoon", title: "Solo Leveling", tags: ["Action", "Fantasy", "System"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNVuYnydQtl0DmTKSs1cgJ0GJdA5_1r1xaL4Ck8qnreBtSH3R_la4vdBQ&s=10",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-3-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-4-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-5-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-6-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-7-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-8-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-9-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-10-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-11-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-12-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-13-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-14-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-15-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-16-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-17-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-18-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-19-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-20-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-21-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-22-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-23-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-24-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-25-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-26-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-27-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-28-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "anime5", type: "anime", title: "Demon Slayer", tags: ["Action", "Adventure", "Fantasy"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyeg9YMwRlYVf1uQoVr2Goah0ttmfaoY5dRvEc78swj0TmCKFzW2WNJ0KS&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime6", type: "anime", title: "Jujutsu Kaisen", tags: ["Action", "Adventure", "Fantasy"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://comenian.org/wp-content/uploads/2024/01/unnamed-87.png",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "series5", type: "series", title: "Loki", tags: ["Marvel", "Action",],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlkLxz2aXOlViITnR4oqJrXYrg1GCIbzcPcuqpfOpfuHVg1yTrtLdBbP0&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            {
+                id: "series8", type: "series", title: "Suits", tags: ["Drama", "Crime",],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://upload.wikimedia.org/wikipedia/en/7/78/Suits_season_7_dvd_cover.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            {
+                id: "anime7", type: "anime", title: "My Hero Academia", tags: ["Action", "Adventure", "Shonen"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1hBPcuRmV9aj8kyzCHSV7PjN8-waYQ9dcTTN7e6AVLuAFFTa86FoL8BX3&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime8", type: "anime", title: "Fullmetal Alchemist: Brotherhood", tags: ["Action", "Adventure", "Shonen"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCc85uII7t27diIuZbp0VQrWeHrea3SPlrsu7ik_AWkwsNqQfTLKxR9zXW&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime9", type: "anime", title: "Blue Lock", tags: ["Sport", "School", "Shonen"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ17YlNIvSP8l2I6BtJcDEoGv0C6UkKwiKEocKCNdHUNfNBOgNLIUp6RIw&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime10", type: "anime", title: "Death Note", tags: ["Action", "Crime", "Thriller"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5T1ByyD1mmrdghFQ17e8g_-Kkb-WXLed91OVY8BYVNg&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime11", type: "anime", title: "Chainsaw Man", tags: ["Action", "Adventure", "Shonen"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPVKCpTpqJ41_tMxDBsloU5wjLk_yzB3ypwGQXnMMySVyU0k48XU3Qca0&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime12", type: "anime", title: "Tokyo Ghoul", tags: ["Action", "Fantasy", "Thriller"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTxwYXlMTf2NG-7GYQKBZnVFKpDc5P-j9OfEJPwKNPkPyoVZkS0foSyt5j&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime13", type: "anime", title: " Want to Eat Your Pancreas", tags: ["Drama", "Romance", "School"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgqvYD-NkipJKhXeHPB3zwapTjP4eTvhLbeYR-gmUtqEfvWx3aCQA0jmQ&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "anime14", type: "anime", title: "Your Lie in April", tags: ["Drama", "Romance", "School"],
+                quality: "HD", year: "2004", rating: "8.7",
+                desc: "Shoyo Hinata, a short middle school student who falls in love with volleyball after seeing a player nicknamed the Little Giant",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwwJSK4fS46jhQkMcecL0DtfS9yEDiMDLrm3ZuG-VcMQ&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [],
+                      
+                }
+            },
+            {
+                id: "webtoon2", type: "webtoon", title: "nano machine", tags: ["Action", "Fantasy", "System"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaQBPgzmSRLZMKcB5wri8SRyKlPqrQCx2SXSLzrgrS0zBbOl-uyl2yUX2_&s=10",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon3", type: "webtoon", title: "Bastard", tags: ["Action", "mystery", "School"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://swebtoon-phinf.pstatic.net/20250204_240/1738645862365qDQDr_JPEG/485.jpg?type=crop540_540",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon4", type: "webtoon", title: "The Remarried Empress ", tags: ["Drama", "Romance", "Royal"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSk_P2l-kEN7XybOUqg0ClreJJEOWgiV8gaXLUbRC5cY4tL0AacGntefQEz&s=10",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon5", type: "webtoon", title: "Sweet Home", tags: ["Action", "Fantasy", "Horror"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://preview.redd.it/i-wanna-more-recommendations-of-series-like-sweet-home-v0-6xmgd4vyx9481.png?auto=webp&s=5f723dccf722ab3a6ad97c67510aafdfa4646d19",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "movie6", type: "movie", title: "The Shawshank Redemption", tags: ["Action","Crime","Drama"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoRlz2Xadmog1kxoCkm3Bc7qDRDmdotLKPjPBGVLXVcSedYc0oxNpF8bI&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "webtoon6", type: "webtoon", title: "Eleceed", tags: ["Action", "Fantasy", "System"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ9JE9ccXMCNklQz1ZRgQM5VVLgTVjjglg2n6p3JeewELT2k8X4ujXdu4&s=10",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "movie10", type: "movie", title: "Annabella", tags: ["Horror","Thriller"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVZf927f7q13GwQonrmGBzHQOtsxMTKvJ9t9YcUmb5qkf0NLaEj8cAFpdS&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "webtoon7", type: "webtoon", title: "I Woke Up As a Notorious Troublemaker!", tags: ["Drama", "Romance", "Royal"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRT6BPnIZ-vA1Nc93r2i9K1GN1Rqmb27TvcmaO0OOvNQ&s=10",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon8", type: "webtoon", title: "The Boxer", tags: ["Action", "Crime", "School"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://mediaproxy.tvtropes.org/width/1200/https://static.tvtropes.org/pmwiki/pub/images/the_boxer_cover_art.jpg",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon9", type: "webtoon", title: " The Greatest Estate Developer", tags: ["Action", "Fantasy", "System"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://upload.wikimedia.org/wikipedia/en/f/f6/The_Greatest_Estate_Developer_Volume_1_Cover.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "movie8", type: "movie", title: "Terrifier", tags: ["Horror","Thriller"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEPXJm61JWv1q1RLwC14te9FPw6wD0oEMA2QEKVvaN_o-YSktBjf5GEM4&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "webtoon10", type: "webtoon", title: "Dreaming Freedom", tags: ["Romance", "Drama",],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI7q0zNK9Tz8-ud9SbLDk1bFUyONMIzkpyTxrwcqbtv7xWYm7YVjZ8WHM8&s=10",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon11", type: "webtoon", title: "A Good Day to Be a Dog", tags: ["Romance", "Drama",],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZodJPib2wY5TqRyuAYBmL9uvd7hY0WUw4YcN8a99ofg&s=10",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon12", type: "webtoon", title: "Iseops Romance", tags: ["Romance", "Drama",],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://swebtoon-phinf.pstatic.net/20260128_41/1769554651658iQv60_JPEG/2Thumb_Poster_5753.jpg?type=crop540_540",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon13", type: "webtoon", title: "see you in my 19th life ", tags: ["Romance", "Drama",],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwE51xrl8ocXeRZLWtXwQgEdkEEMKggiGvWXU7YotBcY4z3Y6UmSRPTeit&s=10",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "webtoon14", type: "webtoon", title: "having official blessing", tags: ["Action", "Fantasy", "System"],
+                quality: "4K", year: "2018", rating: "9.5",
+                desc: "The weakest hunter becomes the only one who can level up.",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNRCcuc2D9kKKXzoW9taOKpp_g3vQ4qoo3gdgK3pBPMYdcYM3UZvJ6T0lf&s=10",
+                content: { "Chapter 1": [
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-1-768x4265.webp",
+                    "https://solomangahub.com/wp-content/uploads/2025/11/solo-leveling-chapter-10-image-2-768x4265.webp",
+                    ], "Chapter 2": [], "Chapter 3": [], "Chapter 4": [], "Chapter 5": [], "Chapter 6": [], "Chapter 7": [], "Chapter 8": [], "Chapter 9": [], "Chapter 10": [], "Chapter 11": [], "Chapter 12": [],
+                }
+            },
+            {
+                id: "movie5", type: "movie", title: "The Fantastic Four: First Steps", tags: ["Marvel","Adventure"],
+                quality: "HD", year: "2025", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYAQ2vyFBPi--RGVj6BmbXgQ05BPOZzHqyUmITqGTk9bPVzU7Pf93ScGtM&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            
+            {
+                id: "movie7", type: "movie", title: "It", tags: ["Horror","Thriller"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkmVRJ71XkUcnm_DAc2_d4_Iw9oX6bqu9lIY4Zz9a9ZlLOCDINM4dnX0zj&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            
+            {
+                id: "movie9", type: "movie", title: "I Saw the Devil", tags: ["Action","Thriller"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJS2j7NIt2QkLM7nIXfdwqmppiCWFjzhy5MEKzKH5NUSAguEaAMXFrh0Bl&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            
+            {
+                id: "movie11", type: "movie", title: "Mission: Impossible", tags: ["Action","Crime","Adventure"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmZuDxw6H39QkBBWX_07aXvR86zAaf3-MoQCcY4pJfluFbn-MWygjkaTY&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "movie12", type: "movie", title: "The Amazing Spider-Man", tags: ["Action","Marvel"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg4d3y05fnqnak5th3s7zTPmBVpn6B64ga1_tYctjc5xhMnatN7U6Vystv&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "movie13", type: "movie", title: "Hacksaw Ridge", tags: ["Action","War"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKQJMv5C2kQ-uWmq_ied97rz6MKVWyhQv9KnHXqE696R0p4SO7TUWhh4Ce&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            {
+                id: "movie14", type: "movie", title: "Rebel Ridge", tags: ["Action","Crime"],
+                quality: "HD", year: "2000", rating: "8.7",
+                desc: " Gladiator follows the Roman general Maximus Decimus Meridius as he seeks revenge against a corrupt emperor who murdered his family and stole his throne",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqHqMrmlWK_VF8oBM5JStqWhQUNtlcv23hvVkQ2JM4zK5l1exu7mAeW0I&s=10",
+                content: { "Watch": ["https://www.dropbox.com/scl/fi/jozc10kfaw2hvj7olkt27/The-Mentalist-S1-E01.mp4?rlkey=frrul3k9xslhjbnsojsklxbsd&st=b1gyubva&raw=1"] }
+            },
+            
+            {
+                id: "series6", type: "series", title: "Breaking Bad", tags: ["Crime", "Action","Drama"],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://resizing.flixster.com/62L88C8qWkMfLCuFC81FWJYCo2Y=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p185846_b_v8_ad.jpg",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            {
+                id: "series10", type: "series", title: "The Flash", tags: ["DC", "Action",],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCLVc11fPX3sbDNPsQz7zrJ3ltAiUt9FrD4lIknCngrX2m67LnWFF5hZKr&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            
+            {
+                id: "series12", type: "series", title: "The Witcher", tags: ["Fantasy", "Action",],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlII6BonSctF4XAmGp74Hv0nr0ABgy2BbJPJgwZOyzhIk9ah0EFPiEUrxf&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            {
+                id: "series13", type: "series", title: "Hannibal", tags: ["Crime", "Horror","Thriller"],
+                quality: "HD", year: "2022", rating: "8.6",
+                desc: " follows Steven Grant, a mild-mannered museum gift-shop employee who discovers he has dissociative identity disorder and shares his body with mercenary Marc Spector",
+                poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlkLxz2aXOlViITnR4oqJrXYrg1GCIbzcPcuqpfOpfuHVg1yTrtLdBbP0&s=10",
+                content: { 
+                    "Episode 1": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 2": ["https://www.dropbox.com/scl/fi/osr5giewiuki1utswvig3/haikyuus1ep1.mp4?rlkey=ce279zspfl4ttsve2q2g5vted&st=ma2q205b&raw=1"],
+                    "Episode 3": [],"Episode 4": [],"Episode 5": [],"Episode 6": [],"Episode 7": [],"Episode 8": [],"Episode 9": [],"Episode 10": [],"Episode 11": [],"Episode 12": [], 
+                }
+            },
+            
+            
+            
+        ];
+
+        let state = { category: 'all', searchQuery: '', activeTag: 'all', user: null, authMode: 'login' };
+        let currentSeries = null;
+
+        
+        if (auth) {
+            auth.onAuthStateChanged(user => {
+                state.user = user;
+                updateUIForUser(user);
+            });
+        }
+
+        function updateUIForUser(user) {
+            const authBtn = document.getElementById('auth-btn');
+            const avatar = document.getElementById('user-avatar');
+            if (!authBtn || !avatar) return;
+            if (user) {
+                authBtn.innerText = "Logout";
+                avatar.innerText = user.email[0].toUpperCase();
+            } else {
+                authBtn.innerText = "Login";
+                avatar.innerText = "G";
+            }
+        }
+
+        function toggleProfile() {
+            document.getElementById('profile-menu').classList.toggle('active');
+        }
+
+        function openAuthModal() {
+            if (state.user) {
+                // If logged in, the "Login" button actually acts as "Logout"
+                auth.signOut().then(() => alert("Logged out!"));
+            } else {
+                document.getElementById('auth-overlay').classList.add('active');
+            }
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-overlay').classList.remove('active');
+        }
+
+        function toggleAuthMode() {
+            const title = document.getElementById('auth-title');
+            const btn = document.getElementById('auth-submit-btn');
+            const toggleText = document.getElementById('auth-toggle-text');
+            const toggleBtn = document.getElementById('auth-toggle-btn');
+
+            if (state.authMode === 'login') {
+                state.authMode = 'signup';
+                title.innerText = "Create Account";
+                btn.innerText = "Sign Up";
+                toggleText.innerText = "Already have an account?";
+                toggleBtn.innerText = "Login";
+            } else {
+                state.authMode = 'login';
+                title.innerText = "Welcome Back";
+                btn.innerText = "Login";
+                toggleText.innerText = "Don't have an account?";
+                toggleBtn.innerText = "Sign Up";
+            }
+        }
+
+        async function processAuth() {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+
+            if (!email || !password) return alert("Please fill in all fields!");
+
+            try {
+                if (state.authMode === 'login') {
+                    await auth.signInWithEmailAndPassword(email, password);
+                    alert("Login successful!");
+                } else {
+                    await auth.createUserWithEmailAndPassword(email, password);
+                    alert("Account created!");
+                }
+                closeAuthModal();
+            } catch (e) {
+                alert("Error: " + e.message);
+            }
+        }
+
+        
+        async function addToMyList() {
+            if (!state.user) return alert("Please login first!");
+            try {
+                await db.collection("users").doc(state.user.uid).set({
+                    favorites: firebase.firestore.FieldValue.arrayUnion(currentSeries.id)
+                }, { merge: true });
+                alert("Added to My List!");
+            } catch (e) { alert("Error: " + e.message); }
+        }
+
+        async function showMyList() {
+            if (!state.user) return alert("Please login first!");
+            showPage('gallery-page');
+            document.getElementById('category-title').innerText = "My Favorites";
+            const grid = document.getElementById('movie-grid');
+            grid.innerHTML = "Loading...";
+            try {
+                const doc = await db.collection("users").doc(state.user.uid).get();
+                if (!doc.exists || !doc.data().favorites) {
+                    grid.innerHTML = "Your list is empty!";
+                    return;
+                }
+                const favorites = doc.data().favorites;
+                grid.innerHTML = '';
+                library.filter(item => favorites.includes(item.id)).forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.onclick = () => openDetails(item);
+                    card.innerHTML = `<div class="poster-container"><img src="${item.poster}"><div class="badge">${item.quality}</div></div><div class="card-info"><h4>${item.title}</h4></div>`;
+                    grid.appendChild(card);
+                });
+            } catch (e) { alert("Error: " + e.message); }
+        }
+
+        
+        function showPage(pageId) {
+            ['gallery-page', 'detail-page', 'selection-page', 'viewer-page'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
+            });
+            const target = document.getElementById(pageId);
+            if(target) target.classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function updateSearch() {
+            state.searchQuery = document.getElementById('search-input').value.toLowerCase();
+            renderGallery();
+        }
+
+        function setCategory(cat) {
+            state.category = cat; state.activeTag = 'all';
+            renderGallery(); showPage('gallery-page');
+        }
+
+        function setGenre(genre) {
+            state.activeTag = genre; state.category = 'all';
+            renderGallery(); showPage('gallery-page');
+        }
+
+        function resetFilters() {
+            state = { ...state, category: 'all', searchQuery: '', activeTag: 'all' };
+            document.getElementById('search-input').value = '';
+            renderGallery(); showPage('gallery-//page');
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('movie-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            const titleEl = document.getElementById('category-title');
+            if (state.activeTag !== 'all') titleEl.innerText = state.activeTag;
+            else if (state.category !== 'all') titleEl.innerText = state.category.toUpperCase();
+            else if (state.searchQuery !== '') titleEl.innerText = `Search: ${state.searchQuery}`;
+            else titleEl.innerText = "All Content";
+
+            const filtered = library.filter(item => {
+                const matchesCat = (state.category === 'all' || item.type === state.category);
+                const matchesTag = (state.activeTag === 'all' || item.tags.includes(state.activeTag));
+                const matchesSearch = (item.title.toLowerCase().includes(state.searchQuery) || item.tags.some(t => t.toLowerCase().includes(state.searchQuery)));
+                return matchesCat && matchesTag && matchesSearch;
+            });
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openDetails(item);
+                card.innerHTML = `<div class="poster-container"><img src="${item.poster}"><div class="badge">${item.quality || 'HD'}</div></div><div class="card-info"><h4>${item.title}</h4></div>`;
+                grid.appendChild(card,);
+            });
+        }
+
+        function openDetails(item) {
+            currentSeries = item;
+            showPage('detail-page');
+            document.getElementById('detail-img').src = item.poster;
+            document.getElementById('detail-title').innerText = item.title;
+            document.getElementById('detail-year').innerText = item.year;
+            document.getElementById('detail-rating').innerText = `⭐ ${item.rating}`;
+            document.getElementById('detail-type').innerText = item.type.toUpperCase();
+            document.getElementById('detail-desc').innerText = item.desc;
+            const genreContainer = document.getElementById('detail-genres');
+            genreContainer.innerHTML = '';
+            item.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'genre-pill';
+                span.innerText = tag;
+                span.onclick = () => setGenre(tag);
+                genreContainer.appendChild(span);
+            });
+            document.getElementById('watch-btn').onclick = () => openSelection(item);
+        }
+
+        function openSelection(item) {
+            showPage('selection-page');
+            document.getElementById('series-title').innerText = item.title;
+            const list = document.getElementById('chapter-list');
+            list.innerHTML = '';
+            Object.keys(item.content).forEach(chap => {
+                const btn = document.createElement('button');
+                btn.className = 'chapter-btn';
+                btn.innerText = chap;
+                btn.onclick = () => openViewer(chap);
+                list.appendChild(btn);
+            });
+        }
+
+        function openViewer(chap) {
+            showPage('viewer-page');
+            document.getElementById('current-chapter-title').innerText = chap;
+            const area = document.getElementById('content-area');
+            area.innerHTML = '';
+            let files = currentSeries.content[chap];
+            if (files[0].includes("dropbox.com")) {
+                files[0] = files[0].replace("dl=0", "raw=1");
+            }
+            const videoTypes = ['anime', 'movie', 'series'];
+            if (videoTypes.includes(currentSeries.type)) {
+                const v = document.createElement('video');
+                v.src = files[0]; v.controls = true; v.autoplay = true;
+                area.appendChild(v);
+            } else {
+                if(currentSeries.type === 'webtoon') area.classList.add('webtoon-mode');
+                else area.classList.remove('webtoon-mode');
+                files.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src; area.appendChild(img);
+                });
+            }
+        }
+
+        function renderFooterGenres() {
+            const list = document.getElementById('genre-list');
+            if (!list) return;
+            const allTags = [];
+            library.forEach(item => item.tags.forEach(t => { if(!allTags.includes(t)) allTags.push(t); }));
+            allTags.sort().forEach(tag => {
+                const li = document.createElement('li');
+                li.innerText = tag;
+                li.onclick = () => setGenre(tag);
+                list.appendChild(li);
+            });
+        }
+
+        window.onload = () => {
+            renderGallery();
+            renderFooterGenres();
+        };
+    </script>
+</body>
+</html>
